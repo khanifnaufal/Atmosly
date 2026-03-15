@@ -5,101 +5,119 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather App</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
+        rel="stylesheet"
+    >
 </head>
 <body>
     
-<div class="card">
-    <div class="search">
-        <input type="text" placeholder="Search City" spellcheck="false">
-        <button><img src="images/search.png" alt="search"></button>
-    </div>
-    <div class="error">
-        <p>Invalid city name</p>
-    </div>
-    <div class="weather">
-        <img src="images/rain.png" class="weather-icon">
-        <h1 class="temp">22°C</h1>
-        <h2 class="city"> New York</h2>
-        <div class="details">
-            <div class="col">
-                <img src="images/humidity.png" alt="">
-                <div>
-                    <p class="humidity">50%</p>
-                    <p>Humidity</p>
+<div class="app">
+    <header class="app-header">
+        <h1 class="app-title">Weather App</h1>
+        <div class="app-controls">
+            <div class="unit-toggle" title="Ganti Celsius / Fahrenheit">
+                <span class="unit unit-c active">°C</span>
+                <span class="unit-separator">|</span>
+                <span class="unit unit-f">°F</span>
+            </div>
+            <button class="theme-toggle" title="Toggle light / dark mode">
+                <span class="theme-icon">☾</span>
+            </button>
+            <select class="language-select" title="Pilih bahasa">
+                <option value="id">ID</option>
+                <option value="en">EN</option>
+            </select>
+        </div>
+    </header>
+
+    <div class="card">
+        <div class="search">
+            <input type="text" placeholder="Cari kota..." spellcheck="false">
+            <button class="btn-search"><img src="images/search.png" alt="search"></button>
+            <button class="btn-location" title="Gunakan lokasi saat ini">📍</button>
+        </div>
+
+        <div class="quick-locations">
+            <button class="quick-city" data-city="Jakarta">Jakarta</button>
+            <button class="quick-city" data-city="Bandung">Bandung</button>
+            <button class="quick-city" data-city="Surabaya">Surabaya</button>
+        </div>
+
+        <div class="error">
+            <p class="error-message">Invalid city name</p>
+            <button class="btn-retry">Coba lagi</button>
+        </div>
+
+        <div class="loading">
+            <div class="spinner"></div>
+            <p class="loading-text">Mengambil data cuaca...</p>
+        </div>
+
+        <div class="weather">
+            <div class="weather-main">
+                <img src="images/rain.png" class="weather-icon" alt="weather icon">
+                <div class="weather-primary">
+                    <h1 class="temp">22°C</h1>
+                    <h2 class="city">New York</h2>
+                    <p class="description">Hujan ringan</p>
+                    <p class="feels-like">Terasa seperti 24°C</p>
                 </div>
             </div>
-            <div class="col">
-                <img src="images/wind.png" alt="">
-                <div>
-                    <p class="wind">15 km/hour</p>
-                    <p>Wind Speed</p>
+
+            <div class="extra-info">
+                <div class="extra-item">
+                    <span class="label sunrise-label">Sunrise</span>
+                    <span class="value sunrise">06:00</span>
+                </div>
+                <div class="extra-item">
+                    <span class="label sunset-label">Sunset</span>
+                    <span class="value sunset">18:00</span>
+                </div>
+                <div class="extra-item">
+                    <span class="label pressure-label">Tekanan</span>
+                    <span class="value pressure">1013 hPa</span>
+                </div>
+                <div class="extra-item">
+                    <span class="label visibility-label">Visibility</span>
+                    <span class="value visibility">10 km</span>
+                </div>
+            </div>
+
+            <div class="details">
+                <div class="col">
+                    <img src="images/humidity.png" alt="">
+                    <div>
+                        <p class="humidity">50%</p>
+                        <p class="humidity-label">Kelembapan</p>
+                    </div>
+                </div>
+                <div class="col">
+                    <img src="images/wind.png" alt="">
+                    <div>
+                        <p class="wind">15 km/jam</p>
+                        <p class="wind-label">Kecepatan angin</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="forecast">
+                <h3 class="forecast-title">Perkiraan cuaca (5 hari)</h3>
+                <div class="forecast-list">
+                    <!-- Forecast items will be injected here -->
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<script>
+<script src="script.js"></script>
 
-const apiKey = "5367fd6aacf668112183a6a5f625b8b5";
-const apiUrl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
-
-const searchBox = document.querySelector(".search input");
-const searchBtn = document.querySelector(".search button");
-const weatherIcon = document.querySelector(".weather-icon");
-
-async function checkWeather(city){
-    const response = await fetch(apiUrl+city+`&appid=${apiKey}`);
-
-    if(response.status == 404){
-        document.querySelector(".error").style.display = "block";
-        document.querySelector(".weather").style.display = "none";
-    }else{
-        var data = await response.json();
-
-
-    document.querySelector(".city").innerHTML = data.name;
-    document.querySelector(".temp").innerHTML = Math.round(data.main.temp) + "°C";
-    document.querySelector(".humidity").innerHTML = data.main.humidity + "%";
-    document.querySelector(".wind").innerHTML = data.wind.speed + " km/hour";
-
-
-    if(data.weather[0].main == "Clouds"){
-        weatherIcon.src = "images/clouds.png";
-    }
-    else if(data.weather[0].main == "Clear"){
-        weatherIcon.src = "images/clear.png";
-    }
-    else if(data.weather[0].main == "Rain"){
-        weatherIcon.src = "images/rain.png";
-    }
-    else if(data.weather[0].main == "Drizzle"){
-        weatherIcon.src = "images/drizzle.png";
-    }
-    else if(data.weather[0].main == "Mist"){
-        weatherIcon.src = "images/mist.png";
-    }
-
-    document.querySelector(".weather").style.display = "block";
-    document.querySelector(".error").style.display = "none";
-    }
-    
-}
-
-searchBtn.addEventListener("click", () => {
-    if (searchBox.value.trim() === "") return;
-    checkWeather(searchBox.value.trim());
-});
-
-searchBox.addEventListener("keyup", (event) => {
-    if (event.key === "Enter" && searchBox.value.trim() !== "") {
-        checkWeather(searchBox.value.trim());
-    }
-});
-
-// Set a default city on load
-checkWeather();
-</script>
 
 </body>
+<footer class="watermark">
+        <p>Created with ❤️ by <a href="https://github.com/khanifnaufal" target="_blank">Khanif Naufal</a></p>
+    </footer>
 </html>
