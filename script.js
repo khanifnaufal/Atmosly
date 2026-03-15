@@ -1,7 +1,7 @@
 // Base URL backend Node.js (proxy OpenWeather)
-const apiBaseUrl = "http://localhost:3001";
-const apiUrl = `${apiBaseUrl}/api/weather`;
-const forecastUrl = `${apiBaseUrl}/api/forecast`;
+const apiBaseUrl = "";
+const apiUrl = "/api/weather";
+const forecastUrl = "/api/forecast";
 
 const searchBox = document.querySelector(".search input");
 const searchBtn = document.querySelector(".btn-search");
@@ -246,8 +246,8 @@ async function fetchByGeolocation() {
                 });
 
                 const [currentRes, forecastRes] = await Promise.all([
-                    fetch(`${apiBaseUrl}/api/weather/by-coords?${params.toString()}`),
-                    fetch(`${apiBaseUrl}/api/forecast/by-coords?${params.toString()}`),
+                    fetch(`/api/weather/by-coords?${params.toString()}`),
+                    fetch(`/api/forecast/by-coords?${params.toString()}`),
                 ]);
 
                 if (!currentRes.ok) {
@@ -341,5 +341,3 @@ languageSelect.addEventListener("change", () => {
 // Initial language texts and default city
 updateLanguageTexts();
 fetchWeather(lastCity);
-
-

@@ -17,6 +17,11 @@ if (!OPENWEATHER_API_KEY) {
 }
 
 app.use(cors());
+app.use(express.static(process.cwd()));
+
+app.get("/", (req, res) => {
+  res.sendFile("index.html", { root: process.cwd() });
+});
 
 // Endpoint untuk current weather berdasarkan nama kota
 app.get("/api/weather", async (req, res) => {
@@ -113,5 +118,3 @@ app.get("/api/forecast/by-coords", async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Weather backend listening on http://localhost:${PORT}`);
 });
-
-
