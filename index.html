@@ -1,19 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Real-time weather app — check current conditions, 5-day forecast, humidity, wind speed, and air quality for any city worldwide.">
+    <meta property="og:title" content="Weather App">
+    <meta property="og:description" content="Real-time weather for any city. Check temperature, 5-day forecast, AQI, wind, and more.">
+    <meta property="og:type" content="website">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⛅</text></svg>">
     <title>Weather App</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
-        rel="stylesheet"
-    >
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    
+
 <div class="app">
     <header class="app-header">
         <h1 class="app-title">Weather App</h1>
@@ -23,40 +25,39 @@
                 <span class="unit-separator">|</span>
                 <span class="unit unit-f">°F</span>
             </div>
-            <button class="theme-toggle" title="Toggle light / dark mode">
+            <button class="theme-toggle" id="theme-toggle" title="Toggle light / dark mode">
                 <span class="theme-icon">☾</span>
             </button>
-            <select class="language-select" title="Pilih bahasa">
+            <select class="language-select" id="language-select" title="Pilih bahasa">
                 <option value="id">ID</option>
                 <option value="en">EN</option>
             </select>
         </div>
     </header>
 
-    <div class="card">
+    <div class="card" id="weather-card">
         <div class="search">
-            <input type="text" placeholder="Cari kota..." spellcheck="false">
-            <button class="btn-search"><img src="images/search.png" alt="search"></button>
-            <button class="btn-location" title="Gunakan lokasi saat ini">📍</button>
+            <div class="search-wrapper">
+                <input type="text" id="search-input" placeholder="Cari kota..." spellcheck="false" autocomplete="off">
+                <div class="autocomplete-dropdown" id="autocomplete-dropdown"></div>
+            </div>
+            <button class="btn-search" id="btn-search"><img src="images/search.png" alt="search"></button>
+            <button class="btn-location" id="btn-location" title="Gunakan lokasi saat ini">📍</button>
         </div>
 
-        <div class="quick-locations">
-            <button class="quick-city" data-city="Jakarta">Jakarta</button>
-            <button class="quick-city" data-city="Bandung">Bandung</button>
-            <button class="quick-city" data-city="Surabaya">Surabaya</button>
+        <div class="quick-locations" id="quick-locations"></div>
+
+        <div class="error" id="error-section">
+            <p class="error-message" id="error-message">Invalid city name</p>
+            <button class="btn-retry" id="btn-retry">Coba lagi</button>
         </div>
 
-        <div class="error">
-            <p class="error-message">Invalid city name</p>
-            <button class="btn-retry">Coba lagi</button>
-        </div>
-
-        <div class="loading">
+        <div class="loading" id="loading-section">
             <div class="spinner"></div>
-            <p class="loading-text">Mengambil data cuaca...</p>
+            <p class="loading-text" id="loading-text">Mengambil data cuaca...</p>
         </div>
 
-        <div class="weather">
+        <div class="weather" id="weather-section">
             <div class="weather-main">
                 <img src="images/rain.png" class="weather-icon" alt="weather icon">
                 <div class="weather-primary">
@@ -65,6 +66,10 @@
                     <p class="description">Hujan ringan</p>
                     <p class="feels-like">Terasa seperti 24°C</p>
                 </div>
+            </div>
+
+            <div class="aqi-row">
+                <span class="aqi-badge" id="aqi-badge"></span>
             </div>
 
             <div class="extra-info">
@@ -98,6 +103,7 @@
                     <img src="images/wind.png" alt="">
                     <div>
                         <p class="wind">15 km/jam</p>
+                        <p class="wind-direction">↑ N</p>
                         <p class="wind-label">Kecepatan angin</p>
                     </div>
                 </div>
@@ -105,19 +111,17 @@
 
             <div class="forecast">
                 <h3 class="forecast-title">Perkiraan cuaca (5 hari)</h3>
-                <div class="forecast-list">
-                    <!-- Forecast items will be injected here -->
-                </div>
+                <div class="forecast-list" id="forecast-list"></div>
             </div>
         </div>
     </div>
 </div>
 
+<footer class="watermark">
+    <p>Created with ❤️ by <a href="https://github.com/khanifnaufal" target="_blank">Khanif Naufal</a></p>
+</footer>
+
 <script src="script.js"></script>
 
-
 </body>
-<footer class="watermark">
-        <p>Created with ❤️ by <a href="https://github.com/khanifnaufal" target="_blank">Khanif Naufal</a></p>
-    </footer>
 </html>

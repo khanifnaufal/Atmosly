@@ -10,7 +10,6 @@ body {
     min-height: 100vh;
     color: #fff;
     display: flex;
-    min-height: 100vh;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
@@ -23,6 +22,7 @@ body.light {
     color: #111;
 }
 
+/* ── Layout ─────────────────────────────────── */
 .app {
     width: 100%;
     max-width: 520px;
@@ -46,6 +46,7 @@ body.light {
     gap: 8px;
 }
 
+/* ── Unit toggle ─────────────────────────────── */
 .unit-toggle {
     padding: 4px 10px;
     border-radius: 999px;
@@ -56,9 +57,7 @@ body.light {
     font-size: 13px;
 }
 
-body.light .unit-toggle {
-    background: rgba(0, 0, 0, 0.05);
-}
+body.light .unit-toggle { background: rgba(0, 0, 0, 0.05); }
 
 .unit {
     cursor: pointer;
@@ -66,15 +65,10 @@ body.light .unit-toggle {
     transition: opacity 0.2s ease;
 }
 
-.unit.active {
-    font-weight: 600;
-    opacity: 1;
-}
+.unit.active { font-weight: 600; opacity: 1; }
+.unit-separator { opacity: 0.4; }
 
-.unit-separator {
-    opacity: 0.4;
-}
-
+/* ── Theme toggle ────────────────────────────── */
 .theme-toggle {
     width: 32px;
     height: 32px;
@@ -86,13 +80,13 @@ body.light .unit-toggle {
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    transition: transform 0.15s ease;
 }
 
-body.light .theme-toggle {
-    background: rgba(0, 0, 0, 0.05);
-    color: #f39c12;
-}
+.theme-toggle:hover { transform: rotate(20deg); }
+body.light .theme-toggle { background: rgba(0, 0, 0, 0.05); color: #f39c12; }
 
+/* ── Language select ─────────────────────────── */
 .language-select {
     border-radius: 999px;
     border: none;
@@ -100,12 +94,12 @@ body.light .theme-toggle {
     font-size: 13px;
     background: rgba(0, 0, 0, 0.25);
     color: inherit;
+    cursor: pointer;
 }
 
-body.light .language-select {
-    background: rgba(0, 0, 0, 0.05);
-}
+body.light .language-select { background: rgba(0, 0, 0, 0.05); }
 
+/* ── Card ────────────────────────────────────── */
 .card {
     width: 100%;
     background: linear-gradient(135deg, #00feba, #5b548a);
@@ -114,6 +108,7 @@ body.light .language-select {
     padding: 28px 24px 26px;
     text-align: center;
     box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+    transition: background 0.6s ease, box-shadow 0.4s ease;
 }
 
 body.light .card {
@@ -121,6 +116,24 @@ body.light .card {
     box-shadow: 0 18px 35px rgba(15, 116, 167, 0.35);
 }
 
+/* Dynamic gradients per weather condition */
+.card.weather-clear          { background: linear-gradient(135deg, #f7971e, #ffd200); }
+.card.weather-clouds         { background: linear-gradient(135deg, #4b6cb7, #182848); }
+.card.weather-rain,
+.card.weather-drizzle        { background: linear-gradient(135deg, #1c3f5e, #4b79a1); }
+.card.weather-thunderstorm   { background: linear-gradient(135deg, #232526, #414345); }
+.card.weather-snow           { background: linear-gradient(135deg, #a1c4fd, #c2e9fb); color: #1a1a2e; }
+.card.weather-mist,
+.card.weather-fog,
+.card.weather-haze,
+.card.weather-smoke,
+.card.weather-dust,
+.card.weather-sand,
+.card.weather-ash,
+.card.weather-squall,
+.card.weather-tornado        { background: linear-gradient(135deg, #606c88, #3f4c6b); }
+
+/* ── Search ──────────────────────────────────── */
 .search {
     width: 100%;
     display: flex;
@@ -128,7 +141,12 @@ body.light .card {
     gap: 10px;
 }
 
-.search input {
+.search-wrapper {
+    position: relative;
+    flex: 1;
+}
+
+.search-wrapper input {
     border: 0;
     outline: 0;
     background: #ebfffc;
@@ -136,10 +154,42 @@ body.light .card {
     padding: 10px 18px;
     height: 52px;
     border-radius: 26px;
-    flex: 1;
+    width: 100%;
     font-size: 16px;
 }
 
+/* ── Autocomplete ────────────────────────────── */
+.autocomplete-dropdown {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+    z-index: 100;
+    overflow: hidden;
+    display: none;
+}
+
+.autocomplete-dropdown.open { display: block; }
+
+.autocomplete-item {
+    padding: 10px 16px;
+    text-align: left;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.15s ease;
+}
+
+.autocomplete-item:hover { background: #f0f7ff; }
+.ac-country { opacity: 0.5; font-size: 12px; margin-left: auto; }
+
+/* ── Buttons ─────────────────────────────────── */
 .btn-search,
 .btn-location {
     width: 52px;
@@ -153,15 +203,11 @@ body.light .card {
     align-items: center;
     justify-content: center;
     transition: transform 0.1s ease, box-shadow 0.1s ease;
+    flex-shrink: 0;
 }
 
-.btn-search img {
-    width: 16px;
-}
-
-.btn-location {
-    font-size: 20px;
-}
+.btn-search img { width: 16px; }
+.btn-location { font-size: 20px; }
 
 .btn-search:hover,
 .btn-location:hover {
@@ -169,6 +215,7 @@ body.light .card {
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
 }
 
+/* ── Quick cities ────────────────────────────── */
 .quick-locations {
     margin-top: 14px;
     display: flex;
@@ -184,15 +231,24 @@ body.light .card {
     background: rgba(0, 0, 0, 0.18);
     color: #f5f5f5;
     cursor: pointer;
+    transition: background 0.2s ease, transform 0.1s ease;
 }
 
 .quick-city:hover {
-    background: rgba(0, 0, 0, 0.28);
+    background: rgba(0, 0, 0, 0.32);
+    transform: translateY(-1px);
 }
 
+/* ── Weather section (fade-in) ───────────────── */
 .weather {
     display: none;
     margin-top: 22px;
+    animation: fadeInUp 0.4s ease;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
 .weather-main {
@@ -204,11 +260,13 @@ body.light .card {
 
 .weather-icon {
     width: 120px;
+    filter: drop-shadow(0 4px 14px rgba(0,0,0,0.22));
+    transition: transform 0.3s ease;
 }
 
-.weather-primary {
-    text-align: left;
-}
+.weather-icon:hover { transform: scale(1.06); }
+
+.weather-primary { text-align: left; }
 
 .weather .temp {
     font-size: 56px;
@@ -234,6 +292,31 @@ body.light .card {
     opacity: 0.85;
 }
 
+/* ── AQI badge ───────────────────────────────── */
+.aqi-row {
+    margin-top: 14px;
+    display: flex;
+    justify-content: center;
+}
+
+.aqi-badge {
+    display: inline-block;
+    padding: 4px 16px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+}
+
+.aqi-badge:empty { display: none; }
+
+.aqi-1 { background: rgba(52, 211, 153, 0.28); color: #a7f3d0; border: 1px solid rgba(52, 211, 153, 0.4); }
+.aqi-2 { background: rgba(251, 191, 36, 0.28); color: #fde68a; border: 1px solid rgba(251, 191, 36, 0.4); }
+.aqi-3 { background: rgba(249, 115, 22, 0.28); color: #fed7aa; border: 1px solid rgba(249, 115, 22, 0.4); }
+.aqi-4 { background: rgba(239, 68, 68, 0.28);  color: #fecaca; border: 1px solid rgba(239, 68, 68, 0.4);  }
+.aqi-5 { background: rgba(139, 92, 246, 0.28); color: #ddd6fe; border: 1px solid rgba(139, 92, 246, 0.4); }
+
+/* ── Extra info grid ─────────────────────────── */
 .extra-info {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -249,17 +332,10 @@ body.light .card {
     font-size: 12px;
 }
 
-.extra-item .label {
-    display: block;
-    opacity: 0.8;
-}
+.extra-item .label { display: block; opacity: 0.8; }
+.extra-item .value { display: block; font-weight: 500; margin-top: 2px; }
 
-.extra-item .value {
-    display: block;
-    font-weight: 500;
-    margin-top: 2px;
-}
-
+/* ── Details (humidity / wind) ───────────────── */
 .details {
     display: flex;
     align-items: center;
@@ -274,67 +350,79 @@ body.light .card {
     text-align: left;
 }
 
-.col img {
-    width: 32px;
-    margin-right: 8px;
-}
+.col img { width: 32px; margin-right: 8px; }
 
 .humidity,
-.wind {
-    font-size: 20px;
-    margin-top: -2px;
+.wind { font-size: 20px; margin-top: -2px; }
+
+.wind-direction {
+    font-size: 12px;
+    opacity: 0.75;
+    margin-top: 2px;
+    font-weight: 500;
 }
 
-.forecast {
-    margin-top: 22px;
-    text-align: left;
-}
+/* ── Forecast — horizontal cards ─────────────── */
+.forecast { margin-top: 22px; text-align: left; }
 
-.forecast-title {
-    font-size: 15px;
-    margin-bottom: 8px;
-}
+.forecast-title { font-size: 15px; margin-bottom: 10px; }
 
 .forecast-list {
     display: flex;
-    flex-direction: column;
-    gap: 6px;
-    max-height: 200px;
-    overflow-y: auto;
-    padding-right: 4px;
+    flex-direction: row;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 6px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,0.2) transparent;
+}
+
+.forecast-list::-webkit-scrollbar { height: 4px; }
+.forecast-list::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.25);
+    border-radius: 4px;
 }
 
 .forecast-item {
+    flex: 0 0 auto;
+    width: 86px;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    padding: 6px 8px;
-    border-radius: 10px;
+    padding: 10px 6px;
+    border-radius: 14px;
     background: rgba(0, 0, 0, 0.22);
-    font-size: 13px;
+    font-size: 12px;
+    text-align: center;
+    gap: 4px;
+    transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.forecast-item:hover {
+    transform: translateY(-3px);
+    background: rgba(0, 0, 0, 0.32);
 }
 
 .forecast-day {
-    font-weight: 500;
-    min-width: 85px;
-}
-
-.forecast-main {
-    flex: 1;
+    font-weight: 600;
+    font-size: 11px;
     opacity: 0.9;
-    padding: 0 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
 }
 
-.forecast-temps {
-    display: flex;
-    gap: 4px;
-    font-weight: 500;
-}
+.forecast-icon { width: 36px; height: 36px; object-fit: contain; }
 
-.forecast-temps .min {
-    opacity: 0.8;
-}
+.forecast-main { font-size: 10px; opacity: 0.8; line-height: 1.2; }
 
+.forecast-temps { display: flex; flex-direction: column; gap: 1px; font-weight: 500; }
+.forecast-temps .max { font-size: 13px; }
+.forecast-temps .min { opacity: 0.7; font-size: 11px; }
+
+/* ── Loading ─────────────────────────────────── */
 .loading {
     margin-top: 22px;
     display: none;
@@ -352,20 +440,16 @@ body.light .card {
     animation: spin 0.8s linear infinite;
 }
 
-.loading-text {
-    font-size: 14px;
-}
+.loading-text { font-size: 14px; }
 
+/* ── Error ───────────────────────────────────── */
 .error {
     margin-top: 14px;
     display: none;
     text-align: left;
 }
 
-.error-message {
-    font-size: 14px;
-    margin-bottom: 6px;
-}
+.error-message { font-size: 14px; margin-bottom: 6px; }
 
 .btn-retry {
     border-radius: 999px;
@@ -375,33 +459,35 @@ body.light .card {
     cursor: pointer;
     background: #ff6b6b;
     color: #fff;
+    transition: transform 0.1s ease;
 }
 
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
+.btn-retry:hover { transform: scale(1.04); }
+
+/* ── Footer ──────────────────────────────────── */
+.watermark {
+    margin-top: 20px;
+    font-size: 13px;
+    opacity: 0.6;
+    text-align: center;
 }
 
+.watermark a { color: inherit; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Responsive ──────────────────────────────── */
 @media (max-width: 480px) {
-    body {
-        padding-top: 24px;
-    }
+    body { padding-top: 24px; }
 
-    .card {
-        padding: 22px 18px 20px;
-    }
+    .card { padding: 22px 18px 20px; }
 
     .weather-main {
         flex-direction: column;
         align-items: center;
     }
 
-    .weather-primary {
-        text-align: center;
-    }
+    .weather-primary { text-align: center; }
 
-    .details {
-        padding: 0;
-    }
+    .details { padding: 0; }
 }
