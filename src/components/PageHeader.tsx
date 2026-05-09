@@ -3,6 +3,7 @@ import { useWeather } from "@/hooks/useWeather";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { LocateFixedIcon } from "lucide-react";
+import { getUserLocation } from "@/lib/utils";
 
 export const PageHeader = () => {
     const { weather, setWeather } = useWeather();
@@ -16,7 +17,16 @@ export const PageHeader = () => {
         <Button
         variant="outline"
         size="icon-sm"
-        onClick={() => {}}>
+        onClick={async() => {
+            getUserLocation().then (({lat,lon}) =>{
+                setWeather({lat,lon});
+
+                localStorage.setItem(APP.STORE_KEY.LAT, lat.toString());
+                localStorage.setItem(APP.STORE_KEY.LON, lon.toString());
+            }).catch((err)=>{
+                alert(err);
+            })
+        }}>
             <LocateFixedIcon/>
         </Button>
         </div>

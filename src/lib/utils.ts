@@ -11,5 +11,15 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const getUserLocation = (): Promise<GeoLocationRes> => {
-  
+  return new Promise((resolve, reject) => {
+    if (!navigator.geolocation){
+      reject('Geolocation not supported')
+    } else{
+      navigator.geolocation.getCurrentPosition((position) => {
+        resolve({lat:position.coords.latitude, lon:position.coords.longitude})
+      }, (err) => {
+        reject(err.message)
+      })
+    }
+  })
 }
