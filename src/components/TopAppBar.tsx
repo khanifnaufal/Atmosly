@@ -1,6 +1,7 @@
 import { Logo } from '@/assets/Logo'
 import { SearchDialog } from '@/components/SearchDialog'
 import { ThemeDropdown } from '@/components/ThemeDropdown'
+import { UnitDropdown } from '@/components/UnitDropdown'
 
 export const TopAppBar = () => {
   return (
@@ -13,6 +14,8 @@ export const TopAppBar = () => {
         <SearchDialog />
         <div className="flex gap-2">
             <ThemeDropdown />
+
+            <UnitDropdown/>
         </div>
       </header>
     </div>

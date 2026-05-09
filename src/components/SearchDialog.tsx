@@ -13,8 +13,10 @@ import { MapPinnedIcon, SearchIcon } from "lucide-react";
 import type { Geocoding } from '@/types';
 import { openWeatherApi } from "@/api";
 import { Input } from "@base-ui/react";
+import { useWeather } from "@/hooks/useWeather";
 
 export const SearchDialog = () => {
+    const { setWeather } = useWeather();
     const [search, setSearch] = useState<string>('');
     const [results, setResults] = useState<Geocoding[]>([]);
     const [SearchDialogOpen, setSearchDialogOpen] = useState<boolean>(false);
@@ -35,7 +37,7 @@ export const SearchDialog = () => {
 
     useEffect(() => {
         const shortcut = (event: KeyboardEvent) => {
-            if(event.key === 'k' && (event.metaKey || event.ctrlKey)){
+            if (event.key === 'k' && (event.metaKey || event.ctrlKey)) {
                 event.preventDefault();
                 setSearchDialogOpen(true);
             }
@@ -87,24 +89,30 @@ export const SearchDialog = () => {
                     {!results.length && (
                         <p className="text-center text-sm py-4">No result found!</p>
                     )}
-                    {results.map(({name, lat, lon, state, country}) => (
-                        <Item key={name + lat + lon} size="sm" className="relative p-2">
+                    {results.map(({ name, lat, lon, state, country }) => (
+                        <Item 
+                            key={name + lat + lon} 
+                            size="sm" 
+                            className="relative p-2 cursor-pointer hover:bg-accent rounded-md transition-colors flex items-center justify-between group"
+                            onClick={() => {
+                                setWeather({ lat, lon });
+                                localStorage.setItem(APP.STORE_KEY.LAT, lat.toString());
+                                localStorage.setItem(APP.STORE_KEY.LON, lon.toString());
+                                setSearchDialogOpen(false);
+                            }}
+                        >
                             <ItemContent>
-                                <ItemTitle>{name}</ItemTitle>
-                                <ItemDescription>
+                                <ItemTitle className="font-medium">{name}</ItemTitle>
+                                <ItemDescription className="text-xs text-muted-foreground">
                                     {state ? state + ', ' : ''}{country}
                                 </ItemDescription>
                             </ItemContent>
                             <ItemActions>
-                                <DialogClose render={
-                                    <Button variant="ghost" size="icon" className='after:absolute after:inset-0'
-                                    onClick={() => {}}>
-                                        <MapPinnedIcon/>
-                                    </Button>
-                                }/>
+                                <MapPinnedIcon className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
                             </ItemActions>
                         </Item>
                     ))}
+
                 </ItemGroup>
             </DialogContent>
 
