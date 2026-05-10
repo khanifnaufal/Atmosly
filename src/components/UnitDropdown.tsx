@@ -1,6 +1,6 @@
 import { APP, WEATHER_API } from "@/config"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -21,21 +21,27 @@ export const UnitDropdown = () => {
 
     const [unit, setUnit] = useState<WeatherUnitType>((localStorage.getItem(APP.STORE_KEY.UNIT) as WeatherUnitType) || WEATHER_API.DEFAULTS.UNIT);
 
+    const isInitialMount = useRef(true);
     useEffect(() => {
+        if (isInitialMount.current) {
+            isInitialMount.current = false;
+            return;
+        }
+
         setWeather({
             unit,
         })
 
         localStorage.setItem(APP.STORE_KEY.UNIT, unit);
-    }, [unit]);
+    }, [unit, setWeather]);
 
     return (
         <DropdownMenu>
-            <DropdownMenuTrigger asChild>
+            <DropdownMenuTrigger render={
                 <Button variant="secondary" size="icon">
                     °{unit === 'metric' ? 'C' : 'F'}
                 </Button>
-            </DropdownMenuTrigger>
+            } />
 
             <DropdownMenuContent align="end" className="w-[150px]">
                 {/* Bungkus bagian ini dengan DropdownMenuGroup */}

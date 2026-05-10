@@ -1,10 +1,10 @@
 import { APP, WEATHER_API } from "@/config";
 import { useEffect, useCallback, useState } from "react";
 
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from "@/components/ui/dialog";
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 import { Kbd, KbdGroup } from "@/components/ui/kbd";
-import { Separator } from "@/components/ui/separator";
+
 import { Item, ItemContent, ItemGroup, ItemTitle, ItemDescription, ItemActions } from "@/components/ui/item";
 import { Button } from "@/components/ui/button";
 
@@ -12,7 +12,7 @@ import { MapPinnedIcon, SearchIcon } from "lucide-react";
 
 import type { Geocoding } from '@/types';
 import { openWeatherApi } from "@/api";
-import { Input } from "@base-ui/react";
+
 import { useWeather } from "@/hooks/useWeather";
 
 export const SearchDialog = () => {
@@ -48,15 +48,18 @@ export const SearchDialog = () => {
     }, [])
 
     useEffect(() => {
-        if (!search) return;
+        if (!search.trim()) {
+            setResults([]);
+            return;
+        }
 
-        (async () => {
+        const debounceTimer = setTimeout(async () => {
             const results = await geocoding(search);
-
             console.log("results found", results);
-
             if (results) setResults(results);
-        })()
+        }, 500);
+
+        return () => clearTimeout(debounceTimer);
     }, [search, geocoding]);
 
     return (

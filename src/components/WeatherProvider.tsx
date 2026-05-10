@@ -1,4 +1,4 @@
-import { Children, createContext } from "react";
+import { createContext } from "react";
 import { APP, WEATHER_API } from "@/config";
 import { useState, useEffect, useCallback } from "react";
 import type { CurrentWeather, MinutelyForecast, HourlyForecast, DailyForecast, Alert, Geocoding, WeatherTimezone, OneCallWeatherRes } from "@/types";
@@ -87,7 +87,7 @@ export const WeatherProvider = ({ children }: React.PropsWithChildren) => {
 
     useEffect(() => {
         (async () => await getWeather({}))();
-    }, [getWeather]);
+    }, []);
 
 
 

@@ -16,6 +16,10 @@ export const MAPBOX = {
     CENTER: [WEATHER_API.DEFAULTS.LON, WEATHER_API.DEFAULTS.LAT] as LngLatLike,
     ZOOM: 12.5,
   },
+  QUOTA: {
+    MONTHLY_LIMIT: 45000, // Safe buffer below 50k
+    STORE_KEY: 'cloudcast-map-loads',
+  },
 } as const;
 
 export const APP = {
