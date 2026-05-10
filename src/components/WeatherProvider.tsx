@@ -24,11 +24,13 @@ type WeatherStateParam = {
 
 type WeatherProviderState = {
     weather: Weather | null;
+    unit: WeatherUnitType;
     setWeather: (weather: WeatherStateParam) => void;
 };
 
 const initialState: WeatherProviderState = {
     weather: null,
+    unit: WEATHER_API.DEFAULTS.UNIT,
     setWeather: () => null,
 }
 
@@ -39,6 +41,7 @@ export const WeatherProvider = ({ children }: React.PropsWithChildren) => {
     const defaultUnit = (localStorage.getItem(APP.STORE_KEY.UNIT) as WeatherUnitType) || WEATHER_API.DEFAULTS.UNIT;
 
     const [weather, setWeather] = useState<Weather | null>(null);
+    const [unit, setUnit] = useState<WeatherUnitType>(defaultUnit);
     const oneCall = useCallback(async (lat: number, lon: number, units: WeatherUnitType) => {
         const response = await openWeatherApi.get('/data/3.0/onecall', {
             params: {
@@ -64,8 +67,8 @@ export const WeatherProvider = ({ children }: React.PropsWithChildren) => {
 
         return response.data as Geocoding[];
     }, []);
-    const getWeather = useCallback(async ({ lat = defaultLat, lon = defaultLon, unit = defaultUnit }: WeatherStateParam) => {
-        const oneCallRes = await oneCall(lat, lon, unit);
+    const getWeather = useCallback(async ({ lat = defaultLat, lon = defaultLon, unit: newUnit = defaultUnit }: WeatherStateParam) => {
+        const oneCallRes = await oneCall(lat, lon, newUnit);
         const reverseGeoRes = await reverseGeo(lat, lon);
         setWeather({
             current: oneCallRes.current,
@@ -79,6 +82,7 @@ export const WeatherProvider = ({ children }: React.PropsWithChildren) => {
                 offset: oneCallRes.timezone_offset,
             },
         });
+        setUnit(newUnit);
 
 
     },
@@ -92,7 +96,7 @@ export const WeatherProvider = ({ children }: React.PropsWithChildren) => {
 
 
     return (
-        <WeatherProviderContext.Provider value={{ weather, setWeather: getWeather }}>
+        <WeatherProviderContext.Provider value={{ weather, unit, setWeather: getWeather }}>
             {children}
         </WeatherProviderContext.Provider>
     )
