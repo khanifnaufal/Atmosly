@@ -188,19 +188,19 @@ export const CurrentWeatherCard = ({ weatherData }: CurrentWeatherCardProps) => 
 
     // 3. COMFORT LEVEL INDICATOR LOGIC
     const getComfortLevel = (dewPoint: number) => {
-        if (dewPoint > 24) return { label: "Sangat Gerah", color: "bg-red-500" };
-        if (dewPoint > 21) return { label: "Gerah", color: "bg-orange-500" };
-        if (dewPoint > 18) return { label: "Cukup Gerah", color: "bg-yellow-500 text-black" };
-        return { label: "Nyaman", color: "bg-green-500" };
+        if (dewPoint > 24) return { label: "Very Humid", color: "bg-red-500" };
+        if (dewPoint > 21) return { label: "Humid", color: "bg-orange-500" };
+        if (dewPoint > 18) return { label: "Somewhat Humid", color: "bg-yellow-500 text-black" };
+        return { label: "Comfortable", color: "bg-green-500" };
     };
     const comfort = getComfortLevel(CurrentWeather.dewPoint);
 
     // 4. FEELS LIKE CONTEXT LABEL LOGIC
     const getFeelsLikeContext = (temp: number) => {
-        if (temp > 35) return "🔥 Sangat panas, hindari aktivitas luar ruangan";
-        if (temp > 28) return "☀️ Panas, tetap terhidrasi";
-        if (temp > 20) return "😊 Nyaman untuk beraktivitas";
-        return "🧥 Sejuk, pertimbangkan pakai jaket";
+        if (temp > 35) return "🔥 Extremely hot, avoid outdoor activities";
+        if (temp > 28) return "☀️ Hot, stay hydrated";
+        if (temp > 20) return "😊 Comfortable for outdoor activities";
+        return "🧥 Cool, consider a light jacket";
     };
     const feelsLikeContext = getFeelsLikeContext(Number(CurrentWeather.feelsLike));
 

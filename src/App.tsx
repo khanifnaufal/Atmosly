@@ -5,27 +5,46 @@ import { PageHeader } from "./components/PageHeader";
 import { CurrentWeatherCard } from "@/components/CurrentWeatherCard";
 import { Map } from "@/components/Map";
 import { HourlyWeatherTabs } from "@/components/HourlyWeatherTabs";
+import { useWeather } from "@/hooks/useWeather";
+import { useWeatherBackground } from "@/hooks/useWeatherBackground";
 
+const AppContent = () => {
+  const { weather } = useWeather();
+  const background = useWeatherBackground(
+    weather?.current.weather[0].id,
+    weather?.timezone.offset,
+    weather?.current.sunrise,
+    weather?.current.sunset
+  );
 
-export const App = () => {
   return (
-    <ThemeProvider>
-      <WeatherProvider>
-
+    <div className="relative min-h-screen">
+      {/* Dynamic Background Layers */}
+      <div className={background.containerClass} />
+      <div className={background.overlayClass} />
+      
       <TopAppBar/>
-      <main className="py-4">
+      <main className="py-4 relative z-10">
         <div className="container">
           <PageHeader/>
 
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
             <CurrentWeatherCard/>
-
             <Map/>
           </div>
 
           <HourlyWeatherTabs/>
         </div>
       </main>
+    </div>
+  );
+}
+
+export const App = () => {
+  return (
+    <ThemeProvider>
+      <WeatherProvider>
+        <AppContent />
       </WeatherProvider>
     </ThemeProvider>
   )
