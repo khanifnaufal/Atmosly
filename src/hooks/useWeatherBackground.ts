@@ -28,12 +28,21 @@ export const useWeatherBackground = (
     const date = new Date(localTime * 1000);
     const hour = date.getUTCHours();
 
-    // Determine time phase
+    // Determine time phase using sunrise/sunset for better accuracy if available
     let timePhase: 'morning' | 'noon' | 'evening' | 'night' = 'noon';
-    if (hour >= 5 && hour < 9) timePhase = 'morning';
-    else if (hour >= 9 && hour < 15) timePhase = 'noon';
-    else if (hour >= 15 && hour < 18) timePhase = 'evening';
-    else timePhase = 'night';
+    
+    if (sunrise && sunset) {
+      if (localTime >= sunrise && localTime < sunrise + 10800) timePhase = 'morning'; // 3 hours after sunrise
+      else if (localTime >= sunrise + 10800 && localTime < sunset - 7200) timePhase = 'noon';
+      else if (localTime >= sunset - 7200 && localTime <= sunset) timePhase = 'evening'; // 2 hours before sunset
+      else timePhase = 'night';
+    } else {
+      // Fallback to hours if sunrise/sunset data is missing
+      if (hour >= 5 && hour < 9) timePhase = 'morning';
+      else if (hour >= 9 && hour < 15) timePhase = 'noon';
+      else if (hour >= 15 && hour < 18) timePhase = 'evening';
+      else timePhase = 'night';
+    }
 
     // Base Gradients (Light Mode)
     const lightGradients = {
