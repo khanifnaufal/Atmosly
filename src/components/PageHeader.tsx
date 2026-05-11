@@ -12,7 +12,9 @@ export const PageHeader = () => {
     return (
         <div className="flex items-center gap-4 mb-4">
         <h2>
-            {weather.location.name}, {weather.location.state ? weather.location.state + ', ' : ''}{weather.location.country}
+            {weather.location?.name || 'Unknown Location'}
+            {weather.location?.state ? `, ${weather.location.state}` : ''}
+            {weather.location?.country ? `, ${weather.location.country}` : ''}
         </h2>
         <Button
         variant="outline"

@@ -3,13 +3,13 @@ import { WeatherProvider } from "./components/WeatherProvider";
 import { TopAppBar } from "./components/TopAppBar";
 import { PageHeader } from "./components/PageHeader";
 import { CurrentWeatherCard } from "@/components/CurrentWeatherCard";
-import { Map } from "@/components/Map";
+import { WeatherMap } from "@/components/WeatherMap";
 import { HourlyWeatherTabs } from "@/components/HourlyWeatherTabs";
 import { useWeather } from "@/hooks/useWeather";
 import { useWeatherBackground } from "@/hooks/useWeatherBackground";
 
 const AppContent = () => {
-  const { weather } = useWeather();
+  const { weather, setWeather } = useWeather();
   const background = useWeatherBackground(
     weather?.current.weather[0].id,
     weather?.timezone.offset,
@@ -30,7 +30,7 @@ const AppContent = () => {
 
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
             <CurrentWeatherCard/>
-            <Map/>
+            <WeatherMap onLocationChange={({ lat, lng }) => setWeather({ lat, lon: lng })} />
           </div>
 
           <HourlyWeatherTabs/>
